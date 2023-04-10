@@ -1,0 +1,154 @@
+{
+  "$kind": "Microsoft.AdaptiveDialog",
+  "$designer": {
+    "name": "GPTVirtualAssistant",
+    "description": "",
+    "id": "A79tBe"
+  },
+  "autoEndDialog": true,
+  "defaultResultProperty": "dialog.result",
+  "triggers": [
+    {
+      "$kind": "Microsoft.OnMessageActivity",
+      "$designer": {
+        "id": "qHBDzl",
+        "name": "Message received (Message received activity)"
+      },
+      "actions": [
+        {
+          "$kind": "Microsoft.SetProperty",
+          "$designer": {
+            "id": "ApoolC"
+          },
+          "property": "conversation.context.messages",
+          "value": "=coalesce(conversation.context.messages, [])"
+        },
+        {
+          "$kind": "Microsoft.IfCondition",
+          "$designer": {
+            "id": "iSuaOv"
+          },
+          "condition": "=count(conversation.context.messages) > settings.openai.max_messages",
+          "actions": [
+            {
+              "$kind": "Microsoft.SetProperty",
+              "$designer": {
+                "id": "5nfF5B"
+              },
+              "property": "conversation.context.messages",
+              "value": "=concat([conversation.context.messages[0]], subArray(conversation.context.messages, 3, count(conversation.context.messages)))"
+            }
+          ]
+        },
+        {
+          "$kind": "Microsoft.SwitchCondition",
+          "$designer": {
+            "id": "PXgnBj"
+          },
+          "cases": [
+            {
+              "value": "RESET_CONVERSATION",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SetProperty",
+                  "$designer": {
+                    "id": "XVuI3J"
+                  },
+                  "property": "conversation.context.messages",
+                  "value": "=[]"
+                },
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "4mZVbC"
+                  },
+                  "activity": "${SendActivity_4mZVbC()}"
+                },
+                {
+                  "$kind": "Microsoft.EndDialog",
+                  "$designer": {
+                    "id": "aixin3"
+                  }
+                }
+              ]
+            },
+            {
+              "value": "SET_PROMPT",
+              "actions": [
+                {
+                  "$kind": "Microsoft.SendActivity",
+                  "$designer": {
+                    "id": "N4sj6t"
+                  },
+                  "activity": "${SendActivity_N4sj6t()}"
+                },
+                {
+                  "$kind": "Microsoft.SetProperty",
+                  "$designer": {
+                    "id": "KWhTOA"
+                  },
+                  "property": "conversation.context.gpt_prompt",
+                  "value": "='<|im_start|>system\\n' + replace(turn.activity.text, 'SET_PROMPT ', '') + '\\n\\n\\n<|im_end|>'"
+                },
+                {
+                  "$kind": "Microsoft.SetProperty",
+                  "$designer": {
+                    "id": "G2x7bO"
+                  },
+                  "property": "conversation.context.messages",
+                  "value": "=[]"
+                }
+              ]
+            }
+          ],
+          "default": [
+            {
+              "$kind": "Microsoft.EditArray",
+              "$designer": {
+                "id": "0de1xo"
+              },
+              "changeType": "push",
+              "itemsProperty": "conversation.context.messages",
+              "value": "='<|im_start|>user\\n' + turn.activity.text + '\\n\\n\\n<|im_end|>'"
+            },
+            {
+              "$kind": "Microsoft.HttpRequest",
+              "$designer": {
+                "id": "xGDgaw"
+              },
+              "resultProperty": "conversation.context.gpt_response",
+              "method": "POST",
+              "body": "={   \"prompt\": conversation.context.gpt_prompt + '\\n' + join(conversation.context.messages, '') + '\\n<|im_start|>assistant ',   \"max_tokens\": 800, \"stop\": [\"<|im_end|>\"], \"frequency_penalty\": 0, \"presence_penalty\": 0, \"top_p\": 0.95, \"temperature\": 0.7 }",
+              "contentType": "application/json",
+              "responseType": "json",
+              "headers": {
+                "api-key": "=settings.openai.apikey"
+              },
+              "url": "=\"https://\"+ settings.openai.account + \".openai.azure.com/openai/deployments/\"+ settings.openai.deploymeny + \"/completions?api-version=2022-12-01\""
+            },
+            {
+              "$kind": "Microsoft.EditArray",
+              "$designer": {
+                "id": "ZQ8D95"
+              },
+              "changeType": "push",
+              "itemsProperty": "conversation.context.messages",
+              "value": "='<|im_start|>assistant\\n' + conversation.context.gpt_response.content.choices[0].text + '\\n\\n\\n<|im_end|>\\n'"
+            },
+            {
+              "$kind": "Microsoft.SendActivity",
+              "$designer": {
+                "id": "HUzaKb"
+              },
+              "activity": "${SendActivity_HUzaKb()}"
+            }
+          ],
+          "condition": "split(turn.activity.text, ' ')[0]"
+        }
+      ]
+    }
+  ],
+  "generator": "GPTVirtualAssistant.lg",
+  "id": "GPTVirtualAssistant",
+  "recognizer": "GPTVirtualAssistant.lu.qna"
+}

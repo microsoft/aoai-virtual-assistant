@@ -1,14 +1,16 @@
-# Project
+# AOAI Virtual Assistant Accelerator
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+Quickly get started with virtual assistants using Azure OpenAI
 
-As the maintainer of this project, please make a few updates:
+## Setup
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+- Clone the repository:
+
+    `git clone https://github.com/microsoft/aoai-virtual-assistant.git`
+
+- Create the app settings file at `./GPTVirtualAssistant/settings/appsettings.json`. Use the example file provided as a template. You will need to fill in the information in the "openai" field.
+- Open the project in Bot Framework Composer
+- [Publish your bot](https://learn.microsoft.com/en-us/composer/how-to-publish-bot?tabs=v2x)
 
 ## Contributing
 

@@ -1,0 +1,38 @@
+[import](common.lg)
+
+# SendActivity_Greeting()
+[Activity
+    Text = ${SendActivity_Greeting_text()}
+]
+
+# SendActivity_Greeting_text()
+- Welcome to your bot.
+
+# SendActivity_DidNotUnderstand()
+[Activity
+    Text = ${SendActivity_DidNotUnderstand_text()}
+]
+
+# SendActivity_DidNotUnderstand_text()
+- Sorry, I didn't get that.
+# SendActivity_4mZVbC()
+[Activity
+    Text = ${SendActivity_4mZVbC_text()}
+]
+
+# SendActivity_N4sj6t()
+[Activity
+    Text = ${SendActivity_N4sj6t_text()}
+]
+
+# SendActivity_HUzaKb()
+[Activity
+    Text = ${SendActivity_HUzaKb_text()}
+]
+
+# SendActivity_HUzaKb_text()
+- ${conversation.context.gpt_response.content.choices[0].text}
+# SendActivity_4mZVbC_text()
+- Resetting conversation.
+# SendActivity_N4sj6t_text()
+- Setting new prompt.
