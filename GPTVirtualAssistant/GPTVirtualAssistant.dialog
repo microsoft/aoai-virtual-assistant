@@ -124,7 +124,7 @@
               "headers": {
                 "api-key": "=settings.openai.apikey"
               },
-              "url": "=\"https://\"+ settings.openai.account + \".openai.azure.com/openai/deployments/\"+ settings.openai.deploymeny + \"/completions?api-version=2022-12-01\""
+              "url": "=\"https://\"+ settings.openai.account + \".openai.azure.com/openai/deployments/\"+ settings.openai.deployment + \"/completions?api-version=2022-12-01\""
             },
             {
               "$kind": "Microsoft.EditArray",
