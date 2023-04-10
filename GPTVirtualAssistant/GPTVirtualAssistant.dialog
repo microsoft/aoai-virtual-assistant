@@ -36,7 +36,7 @@
                 "id": "5nfF5B"
               },
               "property": "conversation.context.messages",
-              "value": "=concat([conversation.context.messages[0]], subArray(conversation.context.messages, 3, count(conversation.context.messages)))"
+              "value": "=subArray(conversation.context.messages, 2, count(conversation.context.messages))"
             }
           ]
         },
